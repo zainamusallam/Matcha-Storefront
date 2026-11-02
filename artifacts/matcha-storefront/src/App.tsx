@@ -14,13 +14,17 @@ import {
   Star,
   X,
 } from 'lucide-react';
-import heroImage from './assets/hero-matcha.jpg';
+import heroImage from './assets/matcha-corner-hero.jpg';
 import matchaImage from './assets/matcha-ritual.jpg';
 import strawberryImage from './assets/strawberry-cloud.jpg';
 import ceramicsImage from './assets/ceramics-kit.jpg';
+import monkeyImage from './assets/matcha-corner-monkey.png';
+import cupSleevesImage from './assets/cup-sleeves-matcha-corner.jpg';
 
 // Edit the customer-facing brand name here; the entire storefront uses this value.
-const BRAND_NAME = 'mori matcha';
+const BRAND_NAME = 'The Matcha Corner';
+const CART_STORAGE_KEY = 'the-matcha-corner-cart';
+const LEGACY_CART_STORAGE_KEY = 'mori-matcha-cart';
 
 type Product = {
   id: string;
