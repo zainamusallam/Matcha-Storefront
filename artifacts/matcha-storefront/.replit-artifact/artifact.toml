@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Matcha Storefront"
+description = "A mobile-friendly matcha e-commerce storefront for young matcha fans, with product discovery, search, product details, cart management, and a simulated checkout flow."
+version = "1.0.0"
+id = "artifacts/matcha-storefront"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18702
+
+[services.development]
+run = "pnpm --filter @workspace/matcha-storefront run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/matcha-storefront", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/matcha-storefront/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18702"
+BASE_PATH = "/"
