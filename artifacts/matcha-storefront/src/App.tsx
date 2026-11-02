@@ -14,12 +14,12 @@ import {
   Star,
   X,
 } from 'lucide-react';
-import heroImage from './assets/matcha-corner-hero.jpg';
-import matchaImage from './assets/matcha-ritual.jpg';
-import strawberryImage from './assets/strawberry-cloud.jpg';
+import heroImage from './assets/matcha-corner-hero-clear-cups.jpg';
+import matchaImage from './assets/clear-cup-ceremonial.jpg';
+import strawberryImage from './assets/clear-cup-strawberry.jpg';
+import vanillaImage from './assets/clear-cup-vanilla.jpg';
 import ceramicsImage from './assets/ceramics-kit.jpg';
-import monkeyImage from './assets/matcha-corner-monkey.png';
-import cupSleevesImage from './assets/cup-sleeves-matcha-corner.jpg';
+import butterflyImage from './assets/matcha-corner-butterfly.png';
 
 // Edit the customer-facing brand name here; the entire storefront uses this value.
 const BRAND_NAME = 'The Matcha Corner';
@@ -60,7 +60,7 @@ const products: Product[] = [
     id: 'everyday',
     name: 'Everyday Matcha',
     type: 'Matcha',
-    image: ceramicsImage,
+    image: matchaImage,
     prices: [18, 42],
     sizes: ['30g', '100g'],
     rating: '4.8',
@@ -88,7 +88,7 @@ const products: Product[] = [
     id: 'vanilla',
     name: 'Vanilla Cloud Latte',
     type: 'Matcha',
-    image: matchaImage,
+    image: vanillaImage,
     prices: [22, 49],
     sizes: ['30g', '100g'],
     rating: '4.7',
@@ -136,7 +136,7 @@ function priceFor(product: Product, sizeIndex: number) {
 
 function readCart(): CartItem[] {
   try {
-    const saved = localStorage.getItem('mori-matcha-cart');
+    const saved = localStorage.getItem(CART_STORAGE_KEY) ?? localStorage.getItem(LEGACY_CART_STORAGE_KEY);
     return saved ? JSON.parse(saved) as CartItem[] : [];
   } catch {
     return [];
@@ -157,7 +157,7 @@ function App() {
   const [newsletter, setNewsletter] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('mori-matcha-cart', JSON.stringify(cart));
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
@@ -232,13 +232,14 @@ function App() {
   const categories = ['Everything', 'Matcha', 'Accessories'];
 
   return (
-    <div className="mori-page">
+    <div className="matcha-corner-page">
       <div className="announcement" data-testid="status-announcement">
         <span>THE LITTLE GREEN RESET</span> — FREE SHIPPING ON ORDERS OVER $50 <span>·</span>
       </div>
       <div className="nav-wrap">
         <nav className="nav" aria-label="Main navigation">
           <button className="brand" onClick={() => jumpTo('home')} aria-label={`${BRAND_NAME} home`} data-testid="button-brand-home">
+            <img className="brand-butterfly" src={butterflyImage} alt="" aria-hidden="true" />
             {BRAND_NAME}<i>.</i>
           </button>
           <div className="navlinks">
@@ -260,9 +261,9 @@ function App() {
       </div>
 
       <main>
-        <section className="hero" id="home" aria-label="Welcome to mori matcha">
+        <section className="hero" id="home" aria-label="Welcome to The Matcha Corner">
           <div className="hero-frame">
-            <img className="hero-image" src={heroImage} alt="Sunlit matcha bowl, iced latte, and whisk arranged on sculptural green blocks" />
+            <img className="hero-image" src={heroImage} alt="Three iced matcha drinks served in clear glasses on a warm cream backdrop" />
             <div className="hero-copy">
               <p className="eyebrow"><span className="dot" />A softer kind of buzz</p>
               <h1>Sip the<br /><em>glow.</em></h1>
@@ -272,7 +273,10 @@ function App() {
                 <button className="pill" onClick={() => jumpTo('story')} data-testid="button-our-story">Meet your matcha <ArrowDownRight size={15} /></button>
               </div>
             </div>
-            <span className="hero-note">Small batch · big main character energy</span>
+            <div className="hero-note" data-testid="mascot-butterfly">
+              <img src={butterflyImage} alt="" aria-hidden="true" />
+              <span>A little flutter<br />in every cup</span>
+            </div>
           </div>
         </section>
 
@@ -302,7 +306,7 @@ function App() {
             {visibleProducts.map((product, index) => (
               <article className="product-card" key={product.id} style={{ animationDelay: `${index * 55}ms` }} data-testid={`card-product-${product.id}`}>
                 <div className="product-visual" onClick={() => openDetail(product)} role="button" tabIndex={0} aria-label={`View ${product.name} details`} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') openDetail(product); }}>
-                  <img src={product.image} alt={`${product.name} styled in a sunlit matcha still life`} loading="lazy" data-testid={`img-product-${product.id}`} />
+                  <img src={product.image} alt={product.type === 'Matcha' ? `${product.name} served in a clear glass` : `${product.name} on a warm cream background`} loading="lazy" data-testid={`img-product-${product.id}`} />
                   <span className="product-tag">{product.tag}</span>
                   <button className="quick-add" aria-label={`Quick add ${product.name}`} data-testid={`button-quick-add-${product.id}`} onClick={(event) => { event.stopPropagation(); addToCart(product); }}>
                     <Plus size={15} /> Add
@@ -328,9 +332,9 @@ function App() {
         <section className="section story" id="story">
           <div className="story-image"><img src={strawberryImage} alt="A fresh strawberry matcha latte glowing in afternoon sun" loading="lazy" /></div>
           <div className="story-copy">
-            <div className="eyebrow">A note from mori</div>
+            <div className="eyebrow">A note from The Matcha Corner</div>
             <h2>Life moves fast.<br />Whisk <em>slow.</em></h2>
-            <p>We started mori because the best part of the day shouldn't need a plan. We source feel-good matcha from family growers in Japan, keep the ingredient list short, and make the ritual yours. Iced, hot, half-whisked on a Tuesday—it's all good.</p>
+            <p>Welcome to The Matcha Corner, a happy little place for good matcha and everyday rituals. Pick your favorite clear-cup drink, find a quiet minute, and make the ritual yours.</p>
             <div className="story-slogans"><span>Your daily dose of green</span><span>Good energy, whisked.</span></div>
             <button className="pill" onClick={() => navigateCategory('Everything')} data-testid="button-explore-shop">Find your daily green <ArrowRight size={15} /></button>
           </div>
@@ -355,9 +359,9 @@ function App() {
 
         <footer className="footer" id="contact">
           <div className="footer-inner">
-            <div><h2>{BRAND_NAME}<i style={{ color: '#dc664e', fontStyle: 'normal' }}>.</i></h2><p>Matcha for the main character moments, and the very regular ones too.</p><button onClick={() => setToast('You are already right where you need to be.')} data-testid="button-community"><Heart size={14} /> Follow the little green life</button></div>
+            <div><h2>{BRAND_NAME}<i style={{ color: '#a76073', fontStyle: 'normal' }}>.</i></h2><p>Matcha for the main character moments, and the very regular ones too.</p><button onClick={() => setToast('You are already right where you need to be.')} data-testid="button-community"><Heart size={14} /> Follow the little green life</button></div>
             <div><h3>Go exploring</h3><a href="#shop" onClick={(event) => { event.preventDefault(); navigateCategory('Everything'); }}>Shop all</a><a href="#shop" onClick={(event) => { event.preventDefault(); navigateCategory('Matcha'); }}>Matcha</a><a href="#shop" onClick={(event) => { event.preventDefault(); navigateCategory('Accessories'); }}>Tools & bowls</a></div>
-            <div><h3>Little links</h3><a href="#story" onClick={(event) => { event.preventDefault(); jumpTo('story'); }}>Our story</a><button onClick={() => setToast('Small batches, big heart. Questions? hello@morimatcha.example')}>Contact us</button><button onClick={() => setToast('We plant a tree for every 10 matcha tins sold.')}>Good stuff we do</button></div>
+            <div><h3>Little links</h3><a href="#story" onClick={(event) => { event.preventDefault(); jumpTo('story'); }}>Our story</a><button onClick={() => setToast('Contact details are coming soon.')}>Contact us</button><button onClick={() => setToast('A little corner for your daily matcha ritual.')}>Our promise</button></div>
             <div><h3>A little note from us</h3><p>Fresh recipes, slow mornings, and the occasional very good thing.</p><form className="newsletter" onSubmit={(event) => { event.preventDefault(); setToast(newsletter.includes('@') ? 'You’re on the list. Good things incoming.' : 'Add a valid email to join the list.'); if (newsletter.includes('@')) setNewsletter(''); }}><input value={newsletter} onChange={(event) => setNewsletter(event.target.value)} type="email" required placeholder="Your email address" aria-label="Email address for updates" data-testid="input-newsletter-email" /><button type="submit" aria-label="Join the newsletter" data-testid="button-newsletter-submit"><ArrowRight size={16} /></button></form></div>
           </div>
           <div className="footer-bottom"><span>© 2025 {BRAND_NAME}. Little by little.</span><span>Made for the everyday ritual. Demo storefront.</span></div>
@@ -367,7 +371,7 @@ function App() {
       {panel && <div className="overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) setPanel(null); }} role="presentation">
         <aside className="drawer" role="dialog" aria-modal="true" aria-label={panel === 'detail' ? `${selectedProduct?.name} details` : panel === 'cart' ? 'Your shopping bag' : panel === 'checkout' ? 'Demo checkout' : panel === 'account' ? 'Demo profile' : 'Navigation menu'}>
           <div className="drawer-top">
-            <h2>{panel === 'cart' ? `Your bag (${cartCount})` : panel === 'detail' ? 'The details' : panel === 'checkout' ? (confirmed ? 'A little confirmation' : 'Demo checkout') : panel === 'account' ? 'Your mori space' : 'Take a look around'}</h2>
+            <h2>{panel === 'cart' ? `Your bag (${cartCount})` : panel === 'detail' ? 'The details' : panel === 'checkout' ? (confirmed ? 'A little confirmation' : 'Demo checkout') : panel === 'account' ? 'Your Matcha Corner' : 'Take a look around'}</h2>
             <button className="close-button" aria-label="Close panel" data-testid="button-close-panel" onClick={() => setPanel(null)}><X size={18} /></button>
           </div>
           {panel === 'cart' && <div>
